@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holy Family Primary - CBC Results</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#eff6ff}
+header{background:#1e3a8a;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.card{background:#fff;border-radius:12px;padding:16px;margin:10px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.top{display:grid;grid-template-columns:1fr 1fr 1fr 1.2fr;gap:10px;margin:10px}
+.main{display:grid;grid-template-columns:380px 1fr;gap:10px;margin:10px}
+@media(max-width:900px){.main{grid-template-columns:1fr}.top{grid-template-columns:1fr 1fr}}
+input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:13px}
+button{width:100%;padding:12px;background:#1e3a8a;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer}
+.btn-sm{width:auto;padding:6px 12px;font-size:12px}.btn-red{background:#dc2626}.btn-blue{background:#2563eb}.btn-gold{background:#ca8a04;color:#111}
+table{width:100%;border-collapse:collapse;font-size:12px}th{background:#1e3a8a;color:#fff;padding:8px;text-align:left}td{padding:7px;border-bottom:1px solid #e2e8f0}
+#loginScreen{position:fixed;inset:0;background:#1e3a8a;display:flex;align-items:center;justify-content:center;z-index:9999}
+.loginBox{background:#fff;padding:26px;border-radius:14px;width:90%;max-width:400px}
+.logo-preview{width:60px;height:60px;border:2px dashed #1e3a8a;border-radius:8px;object-fit:contain;display:block;margin:6px auto;background:#eff6ff}
+@media print{header,.no-print{display:none!important}.print-card{page-break-after:always}}
+</style>
+</head>
+<body>
+<div id="loginScreen"><div class="loginBox">
+<h2 style="text-align:center;color:#1e3a8a">✝️ HOLY FAMILY<br>MUKOTHIMA<br><small>Primary CBC Results</small></h2>
+<div style="margin-top:14px">
+<input id="user" placeholder="Username" value="teacher">
+<input id="pass" type="password" placeholder="Password" value="1234">
+<button onclick="login()">Login</button>
+</div></div></div>
+
+<header><h1>✝️ Holy Family | Primary CBC</h1><div><button class="btn-sm btn-gold" onclick="printCombined()">🖨️ Combined</button> <button class="btn-sm btn-red" onclick="logout()">Logout</button></div></header>
+
+<div class="top no-print">
+<div class="card" style="border-left:4px solid #1e3a8a"><b id="count" style="font-size:22px">0</b><div>Learners</div><span style="font-size:10px" id="currentExamLabel">End Term</span></div>
+<div class="card" style="border-left:4px solid #ca8a04"><b id="meanAvg" style="font-size:22px">0</b><div>Class Mean</div><div style="font-size:10px">Out of 700</div></div>
+<div class="card" style="border:2px solid #1e3a8a;background:#eff6ff">
+<b style="font-size:11px">🏫 SCHOOL SETTINGS</b>
+<img id="logoPreview" class="logo-preview" src="" alt="No Logo">
+<input type="file" id="logoInput" accept="image/*" style="font-size:11px">
+<input id="schoolNameInput" value="HOLY FAMILY MUKOTHIMA PRIMARY" style="font-size:11px;padding:6px">
+<input id="poBoxInput" value="P.O. Box - Mukothima" style="font-size:11px;padding:6px">
+<label style="font-size:10px;font-weight:bold;margin-top:6px;display:block">📝 EXAM TYPE:</label>
+<select id="examTypeSelect" style="font-size:12px;padding:8px;background:#fefce8;border:2px solid #ca8a04;font-weight:bold">
+  <option>Opener Exams</option>
+  <option>Mid Term Exams</option>
+  <option selected>End Term Exams</option>
+  <option>Beginning Term</option>
+</select>
+<label style="font-size:10px;font-weight:bold;margin-top:4px;display:block">📅 TERM:</label>
+<select id="termSelect" style="font-size:12px;padding:8px"><option>Term 1</option><option>Term 2</option><option selected>Term 3</option></select>
+<label style="font-size:10px;font-weight:bold;margin-top:4px;display:block">YEAR:</label>
+<input id="yearInput" type="number" value="2026" style="font-size:12px;padding:6px">
+<button style="padding:8px;font-size:12px;margin-top:6px;background:#ca8a04;color:#111" onclick="saveSettings()">💾 Save Settings</button>
+</div>
+<div class="card"><b style="font-size:11px">CBC Key</b><div style="font-size:10px">EE 80-100<br>ME 60-79<br>AE 40-59<br>BE Below 40</div><div style="margin-top:8px;font-size:10px;background:#fef9c3;padding:4px;border-radius:4px"><span id="displayExamType">End Term Exams - Term 3 2026</span></div></div>
+</div>
+
+<div class="main"><div class="no-print">
+<div class="card"><div style="display:flex;justify-content:space-between"><h3>Add Learner</h3><button class="btn-sm btn-red" onclick="clearAll()">Clear All</button></div>
+<input id="admNo" placeholder="Adm No"><input id="studName" placeholder="Learner Name">
+<select id="gradeClass"><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option selected>Grade 6</option></select>
+<button onclick="addStudent()">Add Learner</button></div>
+
+<div class="card"><h3>Enter Marks (0-100)</h3><select id="studentList"><option value="">-- Select Learner --</option></select>
+<input id="eng" type="number" placeholder="1. English">
+<input id="kis" type="number" placeholder="2. Kiswahili">
+<input id="mat" type="number" placeholder="3. Mathematics">
+<input id="sci" type="number" placeholder="4. Science & Tech">
+<input id="sst" type="number" placeholder="5. Social Studies">
+<input id="agri" type="number" placeholder="6. Agriculture">
+<input id="cre" type="number" placeholder="7. CRE / IRE / HRE">
+<button style="background:#ca8a04;color:#111" onclick="saveMarks()">💾 Save Marks</button>
+</div></div>
+
+<div class="card"><div style="display:flex;justify-content:space-between" class="no-print"><h3>Results - <span id="tableExamType">End Term</span> | <select id="filterGrade" onchange="draw()" style="width:auto;display:inline;padding:4px"><option value="all">All Grades</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option></select></h3><div><button class="btn-sm btn-blue" onclick="printCombined()">Print Combined</button></div></div>
+<div style="overflow:auto" class="no-print"><table><thead><tr><th>#</th><th>Adm</th><th>Name</th><th>Grade</th><th>Total</th><th>Mean</th><th>Level</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+<div id="noData" style="text-align:center;padding:15px;color:#64748b" class="no-print">No learners yet</div>
+<div id="printArea"></div>
+</div></div>
+
+<script>
+let allStudents=JSON.parse(localStorage.getItem('holyfamily_primary_v1')||'[]');
+let schoolLogo=localStorage.getItem('holyfamily_primary_logo')||'';
+let schoolName=localStorage.getItem('holyfamily_primary_schName')||'HOLY FAMILY MUKOTHIMA PRIMARY SCHOOL';
+let poBox=localStorage.getItem('holyfamily_primary_poBox')||'P.O. Box - Mukothima';
+let examType=localStorage.getItem('holyfamily_primary_examType')||'End Term Exams';
+let term=localStorage.getItem('holyfamily_primary_term')||'Term 3';
+let year=localStorage.getItem('holyfamily_primary_year')||'2026';
+document.getElementById('schoolNameInput').value=schoolName;
+document.getElementById('poBoxInput').value=poBox;
+document.getElementById('examTypeSelect').value=examType;
+document.getElementById('termSelect').value=term;
+document.getElementById('yearInput').value=year;
+if(schoolLogo) document.getElementById('logoPreview').src=schoolLogo;
+updateDisplay();
+document.getElementById('logoInput').addEventListener('change', e=>{const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{schoolLogo=ev.target.result; logoPreview.src=schoolLogo}; r.readAsDataURL(f);});
+function updateDisplay(){displayExamType.innerText=examType+' - '+term+' '+year; currentExamLabel.innerText=examType; tableExamType.innerText=examType;}
+function saveSettings(){schoolName=schoolNameInput.value; poBox=poBoxInput.value; examType=examTypeSelect.value; term=termSelect.value; year=yearInput.value; localStorage.setItem('holyfamily_primary_logo',schoolLogo); localStorage.setItem('holyfamily_primary_schName',schoolName); localStorage.setItem('holyfamily_primary_poBox',poBox); localStorage.setItem('holyfamily_primary_examType',examType); localStorage.setItem('holyfamily_primary_term',term); localStorage.setItem('holyfamily_primary_year',year); updateDisplay(); alert('✅ Saved! '+examType);}
+function save(){localStorage.setItem('holyfamily_primary_v1',JSON.stringify(allStudents));draw()}
+function getCBC(a){if(a>=80)return'EE'; if(a>=60)return'ME'; if(a>=40)return'AE'; return'BE';}
+function getCBCFull(a){if(a>=80)return'EE - Exceeding'; if(a>=60)return'ME - Meeting'; if(a>=40)return'AE - Approaching'; return'BE - Below';}
+function addStudent(){const adm=admNo.value.trim(); const name=studName.value.trim(); const g=gradeClass.value; if(!adm||!name){alert('Enter Adm and Name');return} if(allStudents.find(s=>s.adm===adm)){alert('Adm exists');return} allStudents.push({adm,name:name.toUpperCase(),grade:g,eng:0,kis:0,mat:0,sci:0,sst:0,agri:0,cre:0,total:0,mean:0,cbc:'-'}); admNo.value=''; studName.value=''; save();}
+function saveMarks(){const adm=studentList.value; if(!adm){alert('Select learner');return} const s=allStudents.find(x=>x.adm===adm); const vals=[eng,kis,mat,sci,sst,agri,cre].map(i=>parseInt(i.value)||0); if(vals.some(v=>v>100)){alert('Max 100');return} [s.eng,s.kis,s.mat,s.sci,s.sst,s.agri,s.cre]=vals; s.total=vals.reduce((a,b)=>a+b,0); s.mean=Math.round(s.total/7); s.cbc=getCBCFull(s.mean); save(); alert(s.name+' Saved! '+s.total+'/700'); [eng,kis,mat,sci,sst,agri,cre].forEach(i=>i.value='');}
+function deleteStudent(adm){if(!confirm('Delete '+adm+'?'))return; allStudents=allStudents.filter(s=>s.adm!==adm); save()}
+function clearAll(){if(!allStudents.length)return alert('No data'); if(!confirm('DELETE ALL?'))return; allStudents=[];localStorage.removeItem('holyfamily_primary_v1');draw()}
+function draw(){const f=filterGrade.value; let filtered=f==='all'?allStudents:allStudents.filter(s=>s.grade===f); let sorted=[...filtered].sort((a,b)=>b.total-a.total); let sum=0; tableBody.innerHTML=''; sorted.forEach((s,i)=>{sum+=s.mean||0; tableBody.innerHTML+=`<tr><td>${i+1}</td><td>${s.adm}</td><td>${s.name}</td><td>${s.grade}</td><td>${s.total}</td><td>${s.mean}</td><td><b>${s.cbc}</b></td><td><button class="btn-sm" onclick="printOne('${s.adm}')">Print</button> <button class="btn-sm btn-red" onclick="deleteStudent('${s.adm}')">Del</button></td></tr>`;}); count.innerText=filtered.length; meanAvg.innerText=filtered.length?Math.round(sum/filtered.length):0; studentList.innerHTML='<option value="">-- Select Learner --</option>'+allStudents.map(s=>`<option value="${s.adm}">${s.adm} - ${s.name}</option>`).join(''); noData.style.display=filtered.length?'none':'block';}
+function logoHtml(sz){return schoolLogo?`<img src="${schoolLogo}" style="width:${sz}px;height:${sz}px;object-fit:contain">`:`<div style="width:${sz}px;height:${sz}px;background:#1e3a8a;color:#facc15;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:bold;font-size:${sz/2}px">HF</div>`;}
+function printOne(adm){const s=allStudents.find(x=>x.adm===adm); const html=`<div class="print-card card" style="border:2px solid #1e3a8a"><div style="display:flex;align-items:center;gap:15px;border-bottom:2px solid #1e3a8a;padding-bottom:10px;margin-bottom:10px"><div>${logoHtml(80)}</div><div style="text-align:center;flex:1"><h2 style="color:#1e3a8a">${schoolName}</h2><p>${poBox}</p><h3 style="margin-top:6px;background:#1e3a8a;color:#fff;display:inline-block;padding:4px 14px;border-radius:6px">${s.grade} - ${examType} - ${term} ${year}</h3></div><div>${logoHtml(80)}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin-bottom:10px"><div><b>Learner:</b> ${s.name}</div><div><b>Adm No:</b> ${s.adm}</div><div><b>Total:</b> ${s.total}/700</div><div><b>Mean:</b> ${s.mean} - ${s.cbc}</div></div><table><thead><tr><th>#</th><th>Learning Area</th><th>Score</th><th>Level</th></tr></thead><tbody><tr><td>1</td><td>English</td><td>${s.eng}</td><td>${getCBC(s.eng)}</td></tr><tr><td>2</td><td>Kiswahili</td><td>${s.kis}</td><td>${getCBC(s.kis)}</td></tr><tr><td>3</td><td>Mathematics</td><td>${s.mat}</td><td>${getCBC(s.mat)}</td></tr><tr><td>4</td><td>Science & Technology</td><td>${s.sci}</td><td>${getCBC(s.sci)}</td></tr><tr><td>5</td><td>Social Studies</td><td>${s.sst}</td><td>${getCBC(s.sst)}</td></tr><tr><td>6</td><td>Agriculture</td><td>${s.agri}</td><td>${getCBC(s.agri)}</td></tr><tr><td>7</td><td>CRE</td><td>${s.cre}</td><td>${getCBC(s.cre)}</td></tr></tbody></table><div style="margin-top:25px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;font-size:11px;text-align:center"><div><div style="border-top:1px solid #000;margin-top:40px">Class Teacher</div></div><div><div style="border-top:1px solid #000;margin-top:40px">Head Teacher</div></div><div><div style="border-top:1px solid #000;margin-top:40px">Parent</div></div></div></div>`; printArea.innerHTML=html; window.print();}
+function printCombined(){const f=filterGrade.value; let filtered=f==='all'?allStudents:allStudents.filter(s=>s.grade===f); if(!filtered.length)return alert('No learners'); filtered=[...filtered].sort((a,b)=>b.total-a.total); let html=`<div class="print-card card"><div style="display:flex;align-items:center;gap:15px;margin-bottom:12px"><div>${logoHtml(60)}</div><div style="text-align:center;flex:1"><h2>${schoolName}</h2><p>${poBox}</p><p><b>${f==='all'?'All Grades':f} - ${examType} - ${term} ${year} - COMBINED - ${filtered.length} Learners</b></p></div><div>${logoHtml(60)}</div></div><table><thead><tr><th>#</th><th>Adm</th><th>Name</th><th>Grade</th><th>Eng</th><th>Kis</th><th>Mat</th><th>Sci</th><th>SST</th><th>Agri</th><th>CRE</th><th>Total</th><th>Mean</th><th>Level</th></tr></thead><tbody>`; filtered.forEach((s,i)=>{html+=`<tr><td>${i+1}</td><td>${s.adm}</td><td>${s.name}</td><td>${s.grade}</td><td>${s.eng}</td><td>${s.kis}</td><td>${s.mat}</td><td>${s.sci}</td><td>${s.sst}</td><td>${s.agri}</td><td>${s.cre}</td><td><b>${s.total}</b></td><td>${s.mean}</td><td>${s.cbc}</td></tr>`;}); html+=`</tbody></table></div>`; printArea.innerHTML=html; window.print();}
+function login(){if(user.value==='teacher'&&pass.value==='1234'){localStorage.setItem('holyfamily_primary_login','yes');loginScreen.style.display='none'}else alert('teacher / 1234')}
+function logout(){localStorage.removeItem('holyfamily_primary_login');location.reload()}
+if(localStorage.getItem('holyfamily_primary_login')==='yes')loginScreen.style.display='none';
+draw();
+</script>
+</body>
+</html>
